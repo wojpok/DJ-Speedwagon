@@ -11,7 +11,7 @@ from discord.ext.commands import Bot
 from discord.voice_client import VoiceClient
 from dotenv import load_dotenv
 import asyncio
-import nacl
+#import nacl
 import time
 import os
 import random
@@ -173,11 +173,14 @@ async def skip(ctx):
 @bot.command(name='lss', help='Lists downloaded songs')
 async def lss(ctx):
     files = os.listdir()
-    composed = ""
+    ### TODO discord message max length exceeded
+    #composed = "```\n"
     for f in files:
         if isFileNameValid(f):
-            composed = composed + f + "\n"
-    await ctx.send(composed)
+            #composed = composed + f + "\n"
+            print(f)
+    #composed = composed + "```"
+    #await ctx.send(composed)
 
 @bot.command(name='prd', help='Play all downloaded songs in random order')
 async def prd(ctx):
@@ -219,4 +222,52 @@ async def on_message(message: discord.Message):
         #print(message.content)
     await bot.process_commands(message)
 
+champs = [ 
+    'Aatrox', 'Ahri', 'Akali', 'Akshan', 'Alistar', 'Amumu','Anivia','Annie','Aphelios','Ashe','Aurelion Sol','Azir','Bard','Blitzcrank',
+    'Brand','Braum','Caitlyn','Camille','Cassiopeia','ChoGath','Corki','Darius','Diana','Dr. Mundo','Draven','Ekko','Elise','Evelynn','Ezreal','Fiddlesticks',
+    'Fiora','Fizz','Galio','Gangplank','Garen','Gnar','Gragas','Graves','Gwen','Hecarim','Heimerdinger','Illaoi','Irelia','Ivern','Janna','Jarvan IV',
+    'Jax','Jayce','Jhin','Jinx','KaiSa','Kalista','Karma','Karthus','Kassadin','Katarina','Kayle','Kayn','Kennen','KhaZix','Kindred','Kled',
+    'KogMaw','LeBlanc','Lee Sin','Leona','Lillia','Lissandra','Lucian','Lulu','Lux','Malphite','Malzahar','Maokai','Master Yi','Miss Fortune','Mordekaiser','Morgana',
+    'Nami','Nasus','Nautilus','Neeko','Nidalee','Nocturne','Nunu & Willump','Olaf','Orianna','Ornn','Pantheon','Poppy','Pyke','Qiyana','Quinn','Rakan',
+    'Rammus','RekSai','Rell','Renekton','Rengar','Riven','Rumble','Ryze','Samira','Sejuani','Senna','Seraphine','Sett','Shaco','Shen','Shyvana',
+    'Singed','Sion','Sivir','Skarner','Sona','Soraka','Swain','Sylas','Syndra','Tahm Kench','Taliyah','Talon','Taric','Teemo','Thresh','Tristana',
+    'Trundle','Tryndamere','Twisted Fate','Twitch','Udyr','Urgot','Varus','Vayne','Veigar','Vel"Koz','Vex','Vi','Viego','Viktor','Vladimir','Volibear',
+    'Warwick','Wukong','Xayah','Xerath','Xin Zhao','Yasuo','Yone','Yorick','Yuumi','Zac','Zed','Ziggs','Zilean','Zoe','Zyra'
+]
+
+async def teamsDisplay(ctx, count):
+    mix = random.sample(champs, count*2)
+    it = 0
+    mess = "====== Team1: ======\n"
+    
+    for i in range(count):
+        mess = mess + mix[it]+"\n"
+        it = it + 1
+
+    mess = mess + "====== Team2: ======\n"
+
+    for i in range(count):
+        mess = mess + mix[it]+"\n"
+        it = it + 1
+
+    await ctx.send(mess)
+
+    
+@bot.command(name='teamsc', help='Play all downloaded songs in random order')
+async def teamsc(ctx, count):
+    await teamsDisplay(ctx, int(count))
+
+@bot.command(name='teams', help='Play all downloaded songs in random order')
+async def teams(ctx):
+    await teamsDisplay(ctx, int(6))
+
+@bot.command(name='players', help='Play all downloaded songs in random order')
+async def players(ctx):
+    mix = random.sample(champs, len(champs))
+    it = 0
+    #splayers
+    
+
+
+print("Seems like bot is working")
 bot.run(DISCORD_TOKEN)
